@@ -1,10 +1,16 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashborad";
+import Scan from "./pages/Scan";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Hello, World</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/Scan" element={<Scan />}/>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
