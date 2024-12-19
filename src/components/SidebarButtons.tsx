@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   List,
   ListItem,
@@ -22,6 +23,9 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   isOpen,
   setIsOpen,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const navButton: string[] = ["Dashboard", "Scan", "Setting"];
   const navButtonPath: string[] = ["/Dashboard", "/Scan", "/Setting"];
   const buttonIcons: React.ElementType[] = [
@@ -31,17 +35,21 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   ];
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
+  const currentIndex = navButtonPath.findIndex(
+    (path) => path === location.pathname
+  );
+
   const handleRoute = (route: string) => {
     if (isOpen) {
       setIsOpen(false);
       setPendingRoute(route);
     } else {
-      window.location.href = route;
+      navigate(route);
     }
   };
   const handleEndTransition = () => {
     if (!isOpen && pendingRoute) {
-      window.location.href = pendingRoute;
+      navigate(pendingRoute);
       setPendingRoute(null);
     }
   };
@@ -55,6 +63,8 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
       onTransitionEnd={handleEndTransition}
     >
       <ListItemButton
+        disableTouchRipple
+        disableRipple
         onClick={() => setIsOpen(!isOpen)}
         sx={[{ minHeight: 48, px: 2.5 }]}
       >
@@ -65,10 +75,25 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
         {navButton.map((text, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton
+              disableTouchRipple
+              disableRipple
               onClick={() => {
                 handleRoute(navButtonPath[index]);
               }}
-              sx={[{ minHeight: 48, px: 2.5 }]}
+              onMouseEnter={() => {
+                console.log(`hello i am ${text}`);
+              }}
+              sx={[
+                {
+                  "&:hover": {
+                    backgroundColor: "inherit",
+                    transition: "none",
+                  },
+                  minHeight: 48,
+                  px: 2.5,
+                  background: currentIndex === index ? "#abdbe3" : "white",
+                },
+              ]}
             >
               <ListItemIcon>
                 {React.createElement(buttonIcons[index])}
