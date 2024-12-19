@@ -5,13 +5,15 @@ import SidebarButtons from "./SidebarButtons";
 
 const Sidebar: React.FC = () => {
 
-  const navButton: string[] = ['Dashboard', 'Scan', 'Setting']
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
     <button onClick={() => setIsOpen(true)}>open sidebar</button>
-      <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
+      <Drawer 
+        open={isOpen} 
+        onClose={() => setIsOpen(false)}
+        variant="persistent"
+        >
           <SidebarButtons/>
       </Drawer>
     
