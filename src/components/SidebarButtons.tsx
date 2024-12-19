@@ -35,9 +35,10 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   ];
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
-  const currentIndex = navButtonPath.findIndex(
-    (path) => path === location.pathname
-  );
+  const currentIndex =
+    navButtonPath.findIndex((path) => path === location.pathname) !== -1
+      ? navButtonPath.findIndex((path) => path === location.pathname)
+      : 0;
 
   const handleRoute = (route: string) => {
     if (isOpen) {
@@ -86,7 +87,9 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
               sx={[
                 {
                   "&:hover": {
-                    backgroundColor: "inherit",
+                    color: "white",
+                    backgroundColor:
+                      currentIndex === index ? "#5fc2d5" : "#a0a0a0",
                     transition: "none",
                   },
                   minHeight: 48,

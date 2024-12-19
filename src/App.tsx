@@ -7,15 +7,14 @@ import Sidebar from "./components/Sidebar";
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-    <Sidebar/>  
+      {/* <Sidebar /> */}
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Scan" element={<Scan />}/>
+        <Route path="/Scan" element={<Scan />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
 export default App;
-
