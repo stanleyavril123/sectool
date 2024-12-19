@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   List,
   ListItem,
@@ -29,7 +29,22 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
     ScanIcon,
     SettingsIcon,
   ];
+  const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
+  const handleRoute = (route: string) => {
+    if (isOpen) {
+      setIsOpen(false);
+      setPendingRoute(route);
+    } else {
+      window.location.href = route;
+    }
+  };
+  const handleEndTransition = () => {
+    if (!isOpen && pendingRoute) {
+      window.location.href = pendingRoute;
+      setPendingRoute(null);
+    }
+  };
   return (
     <Box
       sx={{
@@ -37,6 +52,7 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
         transition: "width 0.3s ease",
         overflow: "hidden",
       }}
+      onTransitionEnd={handleEndTransition}
     >
       <ListItemButton
         onClick={() => setIsOpen(!isOpen)}
@@ -48,25 +64,17 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
       <List>
         {navButton.map((text, index) => (
           <ListItem key={index} disablePadding>
-            <a href={navButtonPath[index]} style={{ textDecoration: "none" }}>
-              <ListItemButton
-                onClick={() => setIsOpen(false)}
-                sx={[{ minHeight: 48, px: 2.5 }]}
-              >
-                <ListItemIcon
-                  sx={[
-                    { minWidth: 0, justifyContent: "center" },
-                    isOpen ? { mr: 3 } : { mr: "auto" },
-                  ]}
-                >
-                  {React.createElement(buttonIcons[index])}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ whiteSpace: "nowrap", opacity: isOpen ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </a>
+            <ListItemButton
+              onClick={() => {
+                handleRoute(navButtonPath[index]);
+              }}
+              sx={[{ minHeight: 48, px: 2.5 }]}
+            >
+              <ListItemIcon>
+                {React.createElement(buttonIcons[index])}
+              </ListItemIcon>
+              <ListItemText primary={text} sx={{ opacity: isOpen ? 1 : 0 }} />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>

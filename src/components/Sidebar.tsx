@@ -4,7 +4,7 @@ import { useState } from "react";
 import SidebarButtons from "./SidebarButtons";
 
 const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<true | false>(false);
   return (
     <>
       <Drawer
