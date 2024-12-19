@@ -8,13 +8,13 @@ const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-    <button onClick={() => setIsOpen(true)}>open sidebar</button>
+    <button onClick={() => setIsOpen(!isOpen)} style={{paddingLeft: '500px'}}>open sidebar</button>
       <Drawer 
         open={isOpen} 
         onClose={() => setIsOpen(false)}
-        variant="persistent"
+        variant="permanent"
         >
-          <SidebarButtons/>
+         <SidebarButtons isOpen={isOpen} /> 
       </Drawer>
     
     </>
