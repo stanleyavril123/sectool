@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import Scan from "./pages/Scan";
+import Scan from "./pages/ScanPage";
 
 const App: React.FC = () => {
   return (
@@ -15,4 +15,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
