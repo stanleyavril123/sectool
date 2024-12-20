@@ -27,8 +27,8 @@
 }
 
 .scan-input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  border-color: #75bdb3;
+  box-shadow: 0 0 6px #65a298;
 }
 
 .scan-button {
