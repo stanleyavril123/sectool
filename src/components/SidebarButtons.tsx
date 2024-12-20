@@ -13,6 +13,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ScanIcon from "@mui/icons-material/Radar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
+import HistoryIcon from "@mui/icons-material/History";
+import "./SidebarButtons.css";
 
 interface SidebarButtonsProps {
   isOpen: boolean;
@@ -26,11 +28,17 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navButton: string[] = ["Dashboard", "Scan", "Setting"];
-  const navButtonPath: string[] = ["/Dashboard", "/Scan", "/Setting"];
+  const navButton: string[] = ["Dashboard", "Scan", "History", "Settings"];
+  const navButtonPath: string[] = [
+    "/Dashboard",
+    "/Scan",
+    "/History",
+    "/Settings",
+  ];
   const buttonIcons: React.ElementType[] = [
     DashboardIcon,
     ScanIcon,
+    HistoryIcon,
     SettingsIcon,
   ];
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
@@ -57,7 +65,7 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   return (
     <Box
       sx={{
-        width: isOpen ? 240 : 60,
+        width: isOpen ? 240 : 70,
         transition: "width 0.3s ease",
         overflow: "hidden",
       }}
@@ -67,11 +75,12 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
         disableTouchRipple
         disableRipple
         onClick={() => setIsOpen(!isOpen)}
-        sx={[{ minHeight: 48, px: 2.5 }]}
+        sx={[{ minHeight: 48, px: 3 }]}
       >
         <ListItemIcon>{React.createElement(MenuIcon)}</ListItemIcon>
       </ListItemButton>
       <Divider />
+      <div className="button-title">MENU</div>
       <List>
         {navButton.map((text, index) => (
           <ListItem key={index} disablePadding>
@@ -86,6 +95,11 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
               }}
               sx={[
                 {
+                  marginLeft: isOpen ? "20px" : "3px",
+                  marginRight: isOpen ? "20px" : "3px",
+                  marginBottom: "5px",
+                  transition: "margin-left 0.3s ease, margin-right 0.3s ease",
+                  borderRadius: "15px",
                   "&:hover": {
                     color: "white",
                     backgroundColor:
@@ -106,6 +120,8 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
           </ListItem>
         ))}
       </List>
+      <Divider />
+      <div className="button-title">SUPPORT</div>
     </Box>
   );
 };
