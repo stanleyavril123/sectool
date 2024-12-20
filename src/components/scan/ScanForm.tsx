@@ -24,7 +24,7 @@ const ScanForm: React.FC = () => {
 
   return (
     <div className="scan-container">
-      {error && <p className="scan-error">{error}</p>}
+      <p className="scan-error">{error}</p>
       <div className="scan-form">
         <input
           className="scan-input"
