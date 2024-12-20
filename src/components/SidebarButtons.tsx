@@ -9,11 +9,12 @@ import {
   Box,
   Divider,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import ScanIcon from "@mui/icons-material/Radar";
-import SettingsIcon from "@mui/icons-material/Settings";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import HistoryIcon from "@mui/icons-material/History";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import "./SidebarButtons.css";
 
 interface SidebarButtonsProps {
@@ -27,26 +28,25 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const navButton: string[] = ["Dashboard", "Scan", "History", "Settings"];
-  const navButtonPath: string[] = [
-    "/Dashboard",
-    "/Scan",
-    "/History",
-    "/Settings",
-  ];
-  const buttonIcons: React.ElementType[] = [
-    DashboardIcon,
-    ScanIcon,
-    HistoryIcon,
-    SettingsIcon,
-  ];
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
-  const currentIndex =
-    navButtonPath.findIndex((path) => path === location.pathname) !== -1
-      ? navButtonPath.findIndex((path) => path === location.pathname)
-      : 0;
+  const sections = [
+    {
+      title: "MENU",
+      buttons: [
+        { text: "Dashboard", path: "/Dashboard", icon: DashboardOutlinedIcon },
+        { text: "Scan", path: "/Scan", icon: ScanIcon },
+        { text: "Previous Scans", path: "/History", icon: HistoryIcon },
+      ],
+    },
+    {
+      title: "SUPPORT",
+      buttons: [
+        { text: "Settings", path: "/Settings", icon: SettingsOutlinedIcon },
+        { text: "Help", path: "/Help", icon: HelpOutlineOutlinedIcon },
+      ],
+    },
+  ];
 
   const handleRoute = (route: string) => {
     if (isOpen) {
@@ -56,16 +56,18 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
       navigate(route);
     }
   };
+
   const handleEndTransition = () => {
     if (!isOpen && pendingRoute) {
       navigate(pendingRoute);
       setPendingRoute(null);
     }
   };
+
   return (
     <Box
       sx={{
-        width: isOpen ? 240 : 70,
+        width: isOpen ? 300 : 70,
         transition: "width 0.3s ease",
         overflow: "hidden",
       }}
@@ -80,49 +82,61 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
         <ListItemIcon>{React.createElement(MenuIcon)}</ListItemIcon>
       </ListItemButton>
       <Divider />
-      <div className="button-title">MENU</div>
-      <List>
-        {navButton.map((text, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton
-              disableTouchRipple
-              disableRipple
-              onClick={() => {
-                handleRoute(navButtonPath[index]);
-              }}
-              onMouseEnter={() => {
-                console.log(`hello i am ${text}`);
-              }}
-              sx={[
-                {
-                  marginLeft: isOpen ? "20px" : "3px",
-                  marginRight: isOpen ? "20px" : "3px",
-                  marginBottom: "5px",
-                  transition: "margin-left 0.3s ease, margin-right 0.3s ease",
-                  borderRadius: "15px",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor:
-                      currentIndex === index ? "#5fc2d5" : "#a0a0a0",
-                    transition: "none",
-                  },
-                  minHeight: 48,
-                  px: 2.5,
-                  background: currentIndex === index ? "#abdbe3" : "white",
-                },
-              ]}
-            >
-              <ListItemIcon>
-                {React.createElement(buttonIcons[index])}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: isOpen ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <div className="button-title">SUPPORT</div>
+
+      {sections.map((section, sectionIndex) => (
+        <React.Fragment key={sectionIndex}>
+          <div className="button-title">{section.title}</div>
+          <List>
+            {section.buttons.map((button, buttonIndex) => {
+              const isActive =
+                location.pathname === button.path ||
+                (location.pathname === "/" && button.path === "/Dashboard");
+
+              return (
+                <ListItem key={buttonIndex} disablePadding>
+                  <ListItemButton
+                    disableTouchRipple
+                    disableRipple
+                    onClick={() => handleRoute(button.path)}
+                    sx={[
+                      {
+                        marginLeft: isOpen ? "20px" : "5px",
+                        marginRight: isOpen ? "20px" : "5px",
+                        marginBottom: "5px",
+                        transition:
+                          "margin-left 0.3s ease, margin-right 0.3s ease",
+                        borderRadius: "15px",
+                        "&:hover": {
+                          color: "white",
+                          backgroundColor: isActive ? "#5fc2d5" : "#a0a0a0",
+                          transition: "none",
+                        },
+                        minHeight: 48,
+                        px: 2.3,
+                        background: isActive ? "#abdbe3" : "white",
+                      },
+                    ]}
+                  >
+                    <ListItemIcon>
+                      {React.createElement(button.icon)}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={button.text}
+                      sx={{
+                        display: isOpen ? "block" : "none",
+                        whiteSpace: "nowrap",
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+          <Divider />
+        </React.Fragment>
+      ))}
     </Box>
   );
 };
+
 export default SidebarButtons;

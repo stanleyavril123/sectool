@@ -1,4 +1,7 @@
 .button-title {
-   margin-left: 25px;
-margin-top: 20px;
+    margin-left: 30px;
+    margin-top: 20px;
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
+    opacity: 0.5;
 }
