@@ -1,0 +1,73 @@
+h1 {
+    font-size: 60px;
+    margin-left: 50px;
+}
+
+h2 {
+    font-size: 30px;
+    margin-left: 50px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+.dashboard-rectangle {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(241, 241, 241);
+    border-radius: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.dashboard {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.dashboard-tests {
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.dashboard-box {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    margin-left: 30px;
+}
+
+.Warning {
+    background-color: rgba(255, 166, 0, 0.400);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.Warning:hover {
+    background-color: rgba(255, 166, 0, 0.650);
+    transition: background-color 0.25s;
+}
+
+.Critical {
+    background-color: rgba(255, 0, 0, 0.400);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.Critical:hover {
+    background-color: rgba(255, 0, 0, 0.650);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.vul-text {
+    padding: 7px;
+    margin: 10px;
+}
