@@ -29,7 +29,7 @@ const ScanForm: React.FC = () => {
 
   return (
     <div className="scan-container">
-      <h1 style={{color: "#252829", font: 'Inter', padding: 30}}> Scan your website </h1> {/* Appliquer le thème global pour h1 au lieu du inline */}
+      <h1 style={{color: "#252829", font: 'Inter', padding: 30, fontWeight: "normal" }}> Scan your website </h1> {/* Appliquer le thème global pour h1 au lieu du inline */}
       <p className="scan-error">{error}</p>
       <div className="scan-form">
         <input
