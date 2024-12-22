@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ScanForm.css";
+import "./ScanBar.css";
 import ScanIcon from "@mui/icons-material/GpsFixed";
 
 const ScanForm: React.FC = () => {
