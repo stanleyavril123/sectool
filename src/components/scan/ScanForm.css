@@ -12,16 +12,16 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .scan-input {
+  flex: 1;
   padding: 12px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 16px;
-  flex: 1;
-  min-width: 400px;
+  border: 1.8px solid #ccc;
+  border-radius: 18px;
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -32,19 +32,35 @@
 }
 
 .scan-button {
-  padding: 12px 12px;
-  background-color: #65a298;
-  color: #fff;
+  position: absolute;
+  right: 10px;
+  background: transparent;
   border: none;
-  border-radius: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 50%;
   transition: background-color 0.3s ease;
-	font-size: 13px;
-	font-weight: 600;
 }
 
 .scan-button:hover {
-  background-color: #75bdb3;
+  background-color: rgba(101, 162, 152, 0.2);
+}
+
+.scan-icon {
+  color: #56867e;
+  transition: color 0.3s ease;
+}
+
+.scan-button:hover .scan-icon {
+  color: #619b93;
+}
+
+
+.scan-button:hover {
+  color: #619b93;
 }
 
 .scan-error {

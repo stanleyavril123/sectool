@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ScanForm.css";
+import ScanIcon from "@mui/icons-material/GpsFixed";
 
 const ScanForm: React.FC = () => {
   const [ipAddress, setIpAddress] = useState<string>("");
@@ -18,7 +19,7 @@ const ScanForm: React.FC = () => {
       console.log(`Scanning IP: ${ipAddress} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`);
       // connecter scan logic
     } else {
-      setError("Please enter a valid IP address.");
+      setError("Please enter a valid IP address");
     }
   };
 
@@ -33,7 +34,7 @@ const ScanForm: React.FC = () => {
           onChange={(e) => setIpAddress(e.target.value)}
         />
         <button className="scan-button" onClick={handleScan}>
-          Scan
+        <ScanIcon sx={{ fontSize: 24 }} className="scan-icon" />
         </button>
       </div>
       <div className="toggle-container">
