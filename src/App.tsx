@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import Scan from "./pages/Scan";
+import Scan from "./pages/ScanPage";
 import Sidebar from "./components/Sidebar";
 
 const App: React.FC = () => {

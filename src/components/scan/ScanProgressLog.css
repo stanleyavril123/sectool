@@ -1,0 +1,10 @@
+.log-container {
+    display: flex;
+    color: #333;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #f5f6f7;
+    border-radius: 20px;
+    align-self: center;
+    width: 35%
+}

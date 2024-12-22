@@ -1,0 +1,100 @@
+.scan-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.scan-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.scan-input {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  background-color: #f5f5f5; /* card color */
+  border-radius: 18px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scan-input:focus {
+  box-shadow: 0 4px 8px #6572a163; /* accent transparent */
+}
+
+.scan-button {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.scan-icon {
+  color: #6572a2; /* accent */
+  transition: color 0.3s ease;
+}
+
+.scan-button:hover {
+  background-color: #6572a227; /* accent transparent */
+}
+
+.scan-error {
+  height: 20px;
+  color: #d85c5c;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.scan-error:not(:empty) {
+  opacity: 1;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.toggle-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 20px;
+  border: 2px solid #6572a2; /* accent */
+  color: #6572a2; /* accent */
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-button.active {
+  background-color: #6572a2; /* accent */
+  color: #fff; /* white <-> dark */
+  border-color:#6572a2; /* accent */
+}
+
+.toggle-button:hover:not(.active) {
+  background-color: #f0f0f0; /* card color */
+}
