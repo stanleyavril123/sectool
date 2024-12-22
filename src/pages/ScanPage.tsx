@@ -1,9 +1,13 @@
 import React from "react";
-import ScanForm from "../components/scan/ScanBar";
+import ScanBar from "../components/scan/ScanBar";
+import ScanLog from "../components/scan/ScanProgressLog";
 
 const ScanPage: React.FC = () =>  {
   return (
-    <ScanForm/>
+    <div>
+      <ScanBar/>
+      <ScanLog/>
+    </div>
   );
 }
 
