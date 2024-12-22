@@ -1,6 +1,7 @@
 import React from "react";
 import ScanBar from "../components/scan/ScanBar";
 import ScanLog from "../components/scan/ScanProgressLog";
+import "../styles.css"
 
 const ScanPage: React.FC = () =>  {
   return (
