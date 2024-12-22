@@ -28,7 +28,7 @@
 }
 
 .scan-input:focus {
-  box-shadow: 0 4px 8px #6572a227; /* accent transparent */
+  box-shadow: 0 4px 8px #6572a163; /* accent transparent */
 }
 
 .scan-button {
