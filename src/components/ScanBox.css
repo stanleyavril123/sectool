@@ -1,0 +1,67 @@
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+.title {
+    margin-left: 30px;
+}
+
+.title.info {
+    color: rgb(167, 167, 167);
+}
+
+.dashboard-rectangle {
+    display: flex;
+    justify-content: space-around;
+    grid-row: 2;
+    grid-column: 2;
+}
+
+.scan {
+    background-color: rgb(241, 241, 241);
+    border-radius: 20px;
+}
+
+.dashboard-tests {
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.dashboard-box {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    margin-left: 30px;
+}
+
+.Warning {
+    background-color: rgba(255, 166, 0, 0.400);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.Warning:hover {
+    background-color: rgba(255, 166, 0, 0.650);
+    transition: background-color 0.25s;
+}
+
+.Critical {
+    background-color: rgba(255, 0, 0, 0.400);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.Critical:hover {
+    background-color: rgba(255, 0, 0, 0.650);
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.vul-text {
+    padding: 7px;
+    margin: 10px;
+}
