@@ -36,19 +36,19 @@ const ScanForm: React.FC = () => {
           Scan
         </button>
       </div>
-
-      {/* À MODIFIER STYLE (placeholder) */}
       <div className="toggle-container">
-        <label className="toggle-label">
-          <span>{isAdvanced ? "Advanced" : "Basic"} Scan</span>
-          <input
-            type="checkbox"
-            className="toggle-switch"
-            checked={isAdvanced}
-            onChange={() => setIsAdvanced(!isAdvanced)}
-          />
-          <span className="toggle-slider"></span>
-        </label>
+        <button
+          className={`toggle-button ${!isAdvanced ? "active" : ""}`}
+          onClick={() => setIsAdvanced(false)}
+        >
+          Basic Scan
+        </button>
+        <button
+          className={`toggle-button ${isAdvanced ? "active" : ""}`}
+          onClick={() => setIsAdvanced(true)}
+        >
+          Advanced Scan
+        </button>
       </div>
     </div>
   );
