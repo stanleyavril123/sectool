@@ -1,8 +1,20 @@
 import React from "react";
+import { Drawer } from "@mui/material";
+import { useState } from "react";
+import SidebarButtons from "./SidebarButtons";
 
 const Sidebar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<true | false>(false);
   return (
-    <div>hello im am a side bar</div>
+    <>
+      <Drawer
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        variant="permanent"
+      >
+        <SidebarButtons isOpen={isOpen} setIsOpen={setIsOpen} />
+      </Drawer>
+    </>
   );
 };
 
