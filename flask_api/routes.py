@@ -17,17 +17,17 @@ def process_data():
 
     return jsonify(processed_data)
 
-@app.route('/api/crawling', methods=['POST'])
-def process_data():
-    return jsonify(processed_data)
+# @app.route('/api/crawling', methods=['POST'])
+# def process_data():
+#     return jsonify(processed_data)
 
-@app.route('/api/sqlInjection', methods=['POST'])
-def process_data():
-    return jsonify(processed_data)
+# @app.route('/api/sqlInjection', methods=['POST'])
+# def process_data():
+#     return jsonify(processed_data)
 
-@app.route('/api/xss', methods=['POST'])
-def process_data():
-    return jsonify(processed_data)
+# @app.route('/api/xss', methods=['POST'])
+# def process_data():
+#     return jsonify(processed_data)
 
 
 if __name__ == '__main__':
