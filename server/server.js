@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import scanRouter from "./routes/scan.js"; // If/when you have routes
+// import dashboardRouter from "./routes/dashboard.js";
 
 const app = express();
 const PORT = 5020;
@@ -9,7 +10,8 @@ const PORT = 5020;
 app.use(cors());
 
 // Route
-app.use("/Scan", scanRouter);
+app.use(scanRouter);
+// app.use(dashboardRouter);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}.`);

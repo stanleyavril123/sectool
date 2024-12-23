@@ -1,10 +1,14 @@
-import { Router } from "express";
+import express from "express";
 import fetch from "node-fetch"; // Import node-fetch for HTTP requests
 
-const router = Router();
+const app = express();
+
+/*
+TODO : validate input of scan -> send a flask
+*/
 
 // Example: Validate and send data to the Flask API
-router.get("/", async (req, res) => {
+app.get("/Scan", async (req, res) => {
   console.log("Received request at /Scan");
 
   try {
@@ -29,4 +33,4 @@ router.get("/", async (req, res) => {
   }
 });
 
-export default router;
+export default app;
