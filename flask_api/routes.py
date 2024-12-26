@@ -8,6 +8,7 @@ def nmap_scan():
     # recoit data de express
     data = request.get_json()
     target = data.get("target")
+    mode = data.get("mode")
 
     if not target:
         return jsonify({"error": "Target IP required"}), 400
@@ -17,7 +18,7 @@ def nmap_scan():
 
     try:
         # Run scan
-        scan_result = nm.scan(hosts=target, arguments="-sS")  # faire des arguments parametrables (later)
+        scan_result = nm.scan(hosts=target, arguments="-sS")  # TODO: faire des arguments parametrables (later)
 
         # get open ports dans le output
         host_data = scan_result.get("scan", {}).get(target, {})
@@ -34,9 +35,11 @@ def nmap_scan():
             "ports": formatted_ports
         }
 
-        return jsonify(response)
+        print("Nmap scan result:", response)  # DEBUG LOG
+        return jsonify(response), 200
     
     except Exception as e:
+        print("Error during Nmap scan:", str(e))
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/crawling', methods=['POST'])

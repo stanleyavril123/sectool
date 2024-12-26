@@ -32,6 +32,10 @@ const ScanForm: React.FC = () => {
           }),
         });
 
+        console.log("Response status:", response.status);  // DEBUG LOG
+        const responseBody = await response.text();  // DEBUG LOG
+        console.log("Response body:", responseBody);  // DEBUG LOG
+
         if (!response.ok) {
           throw new Error("Error in scanning");
         }
