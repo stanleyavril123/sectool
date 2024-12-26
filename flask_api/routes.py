@@ -4,7 +4,7 @@ import nmap
 app = Flask(__name__)
 
 @app.route('/api/nmap', methods=['POST'])
-def process_data():
+def nmap_scan():
     # recoit data de express
     data = request.get_json()
     target = data.get("target")
