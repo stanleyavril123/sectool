@@ -1,34 +1,58 @@
 from flask import Flask, jsonify, request
+import nmap
 
 app = Flask(__name__)
 
 @app.route('/api/nmap', methods=['POST'])
 def process_data():
-    # Get the data sent from the Express server
+    # recoit data de express
     data = request.get_json()
-    print("Received data:", data)
+    target = data.get("target")
 
-    # Process the data (example: echo it back with a new message)
-    processed_data = {
-        "received": data,
-        "status": "Processed successfully",
-        "new_message": "Hello from Flask API!"
-    }
+    if not target:
+        return jsonify({"error": "Target IP required"}), 400
 
-    return jsonify(processed_data)
+    # creer nmap scanner
+    nm = nmap.PortScanner()
 
-# @app.route('/api/crawling', methods=['POST'])
-# def process_data():
-#     return jsonify(processed_data)
+    try:
+        # Run scan
+        scan_result = nm.scan(hosts=target, arguments="-sS")  # faire des arguments parametrables (later)
 
-# @app.route('/api/sqlInjection', methods=['POST'])
-# def process_data():
-#     return jsonify(processed_data)
+        # get open ports dans le output
+        host_data = scan_result.get("scan", {}).get(target, {})
+        open_ports = host_data.get("tcp", {})
 
-# @app.route('/api/xss', methods=['POST'])
-# def process_data():
-#     return jsonify(processed_data)
+        # formater reponse
+        formatted_ports = []
+        for port, details in open_ports.items():
+            formatted_ports.append({str(port): details.get("name", "unknown")})
 
+        # reponse finale
+        response = {
+            "domain": target,
+            "ports": formatted_ports
+        }
+
+        return jsonify(response)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/crawling', methods=['POST'])
+def crawling():
+    # placeholder
+    return jsonify({"status": "not implemented"})
+
+@app.route('/api/sqlInjection', methods=['POST'])
+def sqlInjection():
+    # placeholder
+    return jsonify({"status": "not implemented"})
+
+@app.route('/api/xss', methods=['POST'])
+def xss():
+    # placeholder
+    return jsonify({"status": "not implemented"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Runs on port 5001

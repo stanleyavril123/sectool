@@ -5,7 +5,7 @@ import fetch from "node-fetch"; // Import node-fetch for HTTP requests
 const app = express();
 
 /*
-TODO : validate input of scan -> send a flask
+TODO : validate input of scan -> send to flask
 */
 
 app.get("/Scan", async (req, res) => {
