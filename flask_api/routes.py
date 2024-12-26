@@ -18,7 +18,7 @@ def nmap_scan():
 
     try:
         # Run scan
-        scan_result = nm.scan(hosts=target, arguments="-sS")  # TODO: faire des arguments parametrables (later)
+        scan_result = nm.scan(hosts=target, arguments="-sT")  # TODO: faire des arguments parametrables (later)
 
         # get open ports dans le output
         host_data = scan_result.get("scan", {}).get(target, {})

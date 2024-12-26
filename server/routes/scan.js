@@ -23,9 +23,6 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Target required"});
     }
 
-    console.log("Received target in Express:", target);  // DEBUG LOG
-    console.log("Received mode in Express:", mode);  // DEBUG LOG
-
     // Fetch responses from Flask API
     const nmapResponse = await fetch("http://localhost:5001/api/nmap", {
       method: "POST",
