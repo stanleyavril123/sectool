@@ -30,13 +30,13 @@ const ScanForm: React.FC = () => {
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        setError(errorResponse.message || "Error in scanning");
+        setError(errorResponse.error);
         return;
       }
       
+      setError(null);
       const result = await response.json();
       setResults(result);
-      setError(null);
     }
     catch (err) {
       console.error("Error:", err);

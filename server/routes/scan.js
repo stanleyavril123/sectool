@@ -28,9 +28,9 @@ router.post("/", async (req, res) => {
     const urlRegex =
       /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
 
-    if (!ipRegex.test(target) && !urlRegex.test(target)) {
-      return res.status(400).json({ error: "Invalid target format" });
-    }
+      if (!ipRegex.test(target) && !urlRegex.test(target)) {
+        return res.status(400).json({ error: "Please provide a valid URL or IP address." });
+      }
 
     // Fetch responses from Flask API
     const nmapResponse = await fetch("http://localhost:5001/api/nmap", {
@@ -78,9 +78,9 @@ router.post("/", async (req, res) => {
     res.status(200).json(combinedResponse);
   }
   catch (error) {
-    console.error(`Error: ${error.message || "An unexpected error occurred"}`);
+    console.error(`Error: ${error.message || "An unexpected error occurred. Please check logs"}`);
     res.status(500).json({
-      error: "Error communicating with Flask API",
+      error: "An unexpected error occurred. Please check logs.",
       message: error.message || "No details",
     });
   }
