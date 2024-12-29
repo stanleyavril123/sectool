@@ -1,14 +1,10 @@
 from flask import Flask, jsonify, request
 import nmap
-import os
-import json
-import subprocess
 
 app = Flask(__name__)
 
 @app.route('/api/nmap', methods=['POST'])
 def nmap_scan():
-    # Recoit data de Express
     data = request.get_json()
     target = data.get("target")
     mode = data.get("mode")
@@ -17,22 +13,25 @@ def nmap_scan():
         return jsonify({"error": "Target IP required"}), 400
 
     try:
-        nmap_command = ["nmap", target, "-sT", "--reason", "-oJ", "-"] # TODO : argumements parametrables pour advanced
+        nm = nmap.PortScanner()
 
-        process = subprocess.run(
-            nmap_command,
-            text=True,
-            capture_output=True,
-            check=True
-        )
+        if mode == "advanced":
+            arguments = "-sS -A --reason"
+        else:
+            arguments = "-sT --reason"
 
-        # retourner output
-        nmap_output = json.loads(process.stdout)
-        return jsonify(nmap_output), 200
+        nm.scan(hosts=target, arguments=arguments)
+
+        scan_results = {
+            host: nm[host]
+            for host in nm.all_hosts()
+        }
+
+        return jsonify(scan_results), 200
 
     except Exception as e:
         print(f"Error running Nmap: {e}")
-        return jsonify({"error": f"Nmap failed: {e.stderr}"}), 500
+        return jsonify({"error": f"Nmap failed: {str(e)}"}), 500
 
 @app.route('/api/crawling', methods=['POST'])
 def crawling():
