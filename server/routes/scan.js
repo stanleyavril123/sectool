@@ -16,7 +16,6 @@ TODO : validate input of scan -> send to flask
 */
 router.post("/", async (req, res) => {
   try {
-    console.log("Request body:", req.body); // DEBUG LOG
     const { target, mode } = req.body;
 
     if (!target) {
@@ -50,20 +49,30 @@ router.post("/", async (req, res) => {
 
     const combinedResponse = {
       status: "success",
-      tools: [nmapResponse, crawlResponse, sqlInjectionResponse, xssResponse],
       timestamp: new Date().toISOString(),
+      tools: [nmapResponse, crawlResponse, sqlInjectionResponse, xssResponse],
+
     };
 
-    // Sauvegarder resultat dans "server/data/scan_results"
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `${target.replace(/[^a-zA-Z0-9]/g, "_")}_${timestamp}.json`;
+    // creer nom du fichier
+    const date = new Date();
+    const date_name = date.toISOString().split("T")[0];
+    const time_name = date.toTimeString().split(" ")[0].replace(/:/g, "-");
+    const filename = `${date_name}_${time_name}.json`;
     const filepath = path.join(RESULTS_DIR, filename);
+
+    // Sauvegarder et envoyer resultat
+    fs.writeFileSync(filepath, JSON.stringify(combinedResponse, null, 2), "utf8");
+    console.log("File saved successfully:", filepath);
 
     res.status(200).json(combinedResponse);
   }
   catch (error) {
-    console.error("Error communicating with Flask API:", error);
-    res.status(500).send("Error communicating with Flask API");
+    console.error(`Error: ${error.message || "An unexpected error occurred"}`);
+    res.status(500).json({
+      error: "Error communicating with Flask API",
+      message: error.message || "No details",
+    });
   }
 });
 
