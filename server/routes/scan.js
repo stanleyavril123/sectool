@@ -22,6 +22,16 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Target required"});
     }
 
+    // validation des inputs
+    const ipRegex =
+      /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+    const urlRegex =
+      /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
+
+    if (!ipRegex.test(target) && !urlRegex.test(target)) {
+      return res.status(400).json({ error: "Invalid target format" });
+    }
+
     // Fetch responses from Flask API
     const nmapResponse = await fetch("http://localhost:5001/api/nmap", {
       method: "POST",
