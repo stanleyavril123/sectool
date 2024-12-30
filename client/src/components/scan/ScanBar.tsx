@@ -6,24 +6,41 @@ const ScanForm: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<string | null>(null);
 
-  const validateInput = (input: string): boolean => {
-    const ipRegex =
-      /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
-    
-    const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
-
-    return ipRegex.test(input) || urlRegex.test(input);
-  };
-
-  const handleScan = () => {
-    if (validateInput(input)) {
-      setError(null);
-      // connecter scan logic
-      console.log(`Scanning : ${input} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`);
+  const handleScan = async () => {
+    if (!input.trim()) {
+      setError("Input cannot be empty.");
+      return;
     }
-    else {
-      setError("Please enter a valid IP address or URL");
+    
+    console.log(`Scanning : ${input} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`);
+    
+    try {
+      const response = await fetch("http://localhost:5020/Scan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          target: input,
+          mode: isAdvanced ? "Advanced" : "Basic",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        setError(errorResponse.error);
+        return;
+      }
+      
+      setError(null);
+      const result = await response.json();
+      setResults(result);
+    }
+    catch (err) {
+      console.error("Error:", err);
+      setError("Error occured while scanning. Please try again.");
     }
   };
 

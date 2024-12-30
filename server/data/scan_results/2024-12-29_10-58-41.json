@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "timestamp": "2024-12-29T15:58:41.973Z",
+  "tools": [
+    {
+      "domain": "127.0.0.1",
+      "ports": [
+        {
+          "631": "ipp"
+        },
+        {
+          "3000": "ppp"
+        },
+        {
+          "5001": "commplex-link"
+        }
+      ]
+    },
+    {
+      "status": "not implemented"
+    },
+    {
+      "status": "not implemented"
+    },
+    {
+      "status": "not implemented"
+    }
+  ]
+}

@@ -1,83 +1,32 @@
-const { v4: uuidv4 } = require('uuid');
-
-class scanManager {
-    constructor(scanManager) {
-        this.scanManager = scanManager;
-    }
-
-    async getUsers() {
-        const users = JSON.parse(await this.scanManager.readFile());
-        return users;
-    }
-
-    async createUser(userData) {
-        const token = uuidv4();
-        const users = await this.getUsers();
-        const storedUser = users.find(user => user.username === userData.username);
-        
-        if (storedUser) {
-            return null;
+const getWebServer = (nmapResponse) => {
+  const portList = [];
+  try {
+    for (const ip in nmapResponse) {
+      if (nmapResponse.hasOwnProperty(ip)) {
+        const tcpPorts = nmapResponse[ip].tcp;
+        for (const [portid, details] of Object.entries(tcpPorts)) {
+          const serviceName = details.name;
+          console.log(`Processing port ${portid}: ${serviceName}`);
+          if (serviceName === "http" || serviceName === "https") {
+            const portInfo = { [portid]: serviceName };
+            portList.push(portInfo);
+          } else {
+            console.log(`No relevant service for port ${portid}`);
+          }
         }
-
-        const newUser = {
-            username: userData.username,
-            password: userData.password,
-            token: token
-        }
-
-        users.push(newUser);
-        await this.scanManager.writeData(users);
-
-        return token;
+        return {
+          domain:
+            nmapResponse[ip].hostnames[0]?.name ||
+            nmapResponse[ip].addresses.ipv4,
+          ports: portList,
+        };
+      }
     }
+  } catch (error) {
+    console.error(`Error processing ports: ${error.message}`);
+    return null;
+  }
+  return null;
+};
 
-    async logInUser(username, password) {
-        try {
-            const users = await this.getUsers();
-            const storedUser = users.find(user => user.username === username && user.password === password);
-
-            if (!storedUser) {
-                return null;                
-            }
-
-            const newToken = uuidv4();
-            storedUser.token = newToken;
-            await this.scanManager.writeData(users);
-
-            return newToken;
-        }
-        catch (error) {
-            // faire message erreur (maybe)
-            return null;
-        }        
-    }
-
-    async logOffUser(userToken) {
-        try {
-            const users = await this.getUsers();
-            const storedUser = users.find(user => user.token === userToken);
-
-            if (!storedUser) {
-                return false
-            }
-
-            delete storedUser.token;
-            await this.scanManager.writeData(users);
-
-            return true;
-        }   
-        catch(error) {
-            // faire message erreur (maybe)
-            return false;
-        }
-    }
-
-    async validateToken(userToken) {
-        const users = await this.getUsers();
-        const storedUser = users.find(user => user.token === userToken);
-
-        return storedUser ? storedUser : undefined;
-    }
-}
-
-module.exports = { scanManager };
+export default getWebServer;

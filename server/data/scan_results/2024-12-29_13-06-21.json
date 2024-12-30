@@ -1,0 +1,65 @@
+{
+  "status": "success",
+  "timestamp": "2024-12-29T18:06:21.791Z",
+  "tools": [
+    {
+      "127.0.0.1": {
+        "addresses": {
+          "ipv4": "127.0.0.1"
+        },
+        "hostnames": [
+          {
+            "name": "localhost",
+            "type": "PTR"
+          }
+        ],
+        "status": {
+          "reason": "conn-refused",
+          "state": "up"
+        },
+        "tcp": {
+          "631": {
+            "conf": "3",
+            "cpe": "",
+            "extrainfo": "",
+            "name": "ipp",
+            "product": "",
+            "reason": "syn-ack",
+            "state": "open",
+            "version": ""
+          },
+          "3000": {
+            "conf": "3",
+            "cpe": "",
+            "extrainfo": "",
+            "name": "ppp",
+            "product": "",
+            "reason": "syn-ack",
+            "state": "open",
+            "version": ""
+          },
+          "5001": {
+            "conf": "3",
+            "cpe": "",
+            "extrainfo": "",
+            "name": "commplex-link",
+            "product": "",
+            "reason": "syn-ack",
+            "state": "open",
+            "version": ""
+          }
+        },
+        "vendor": {}
+      }
+    },
+    {
+      "status": "not implemented"
+    },
+    {
+      "status": "not implemented"
+    },
+    {
+      "status": "not implemented"
+    }
+  ]
+}
