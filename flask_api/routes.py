@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request
 import nmap
+import subprocess
+import json
+import os
 
 app = Flask(__name__)
 
@@ -34,9 +37,53 @@ def nmap_scan():
         return jsonify({"error": f"Nmap failed: {str(e)}"}), 500
 
 @app.route('/api/crawling', methods=['POST'])
-def crawling():
-    # placeholder
-    return jsonify({"status": "not implemented"})
+def web_crawler():
+    data = request.get_json()
+    print("Received data:", data)
+    domain = data.get('domain')
+    ports = data.get('ports', [])
+    max_depth = 3  # peut-etre metre ces info dans le body.. a voire
+    max_pages = 100
+    
+    if not domain:
+        return jsonify({"error: Domain not found"}), 400
+    
+    crawler_script_path = os.path.join(
+        os.path.dirname(__file__), 
+        "scripts", 
+        "crawler.js"
+    )
+     
+    try:
+        result = subprocess.run(
+            ["node", crawler_script_path, domain, json.dumps(ports), str(max_depth), str(max_pages)],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        print("STDOUT:", result.stdout)  # Log standard output
+        print("STDERR:", result.stderr)  # Log errors
+ 
+        if result.returncode != 0:
+            return jsonify({"error": "Crawler failed", "details": result.stderr}), 500
+        
+        output = json.loads(result.stdout)
+        return jsonify(output)
+    
+    except subprocess.TimeoutExpired:
+        return jsonify({"error": "Crawler timed out"}), 504
+    except json.JSONDecodeError as e:
+
+        print("JSONDecodeError:", e)
+        print("STDOUT that caused error:", result.stdout)
+        return jsonify({
+            "error": "Invalid JSON output",
+            "details": str(e),
+            "stdout": result.stdout.strip()
+        }), 500
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500 
 
 @app.route('/api/sqlInjection', methods=['POST'])
 def sqlInjection():
