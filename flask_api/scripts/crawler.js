@@ -1,4 +1,4 @@
-import WebCrawler from "./WebCrawler.js";
+import WebCrawler from "./webcrawler.js";
 
 (async () => {
   try {
