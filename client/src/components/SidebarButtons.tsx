@@ -9,12 +9,12 @@ import {
   Box,
   Divider,
 } from "@mui/material";
-import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import ScanIcon from "@mui/icons-material/Radar";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import HistoryIcon from "@mui/icons-material/History";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import "./SidebarButtons.css";
 
 interface SidebarButtonsProps {
@@ -32,15 +32,13 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
 
   const sections = [
     {
-      title: "MENU",
       buttons: [
-        { text: "Dashboard", path: "/Dashboard", icon: DashboardOutlinedIcon },
+        { text: "Dashboard", path: "/Dashboard", icon: DashboardRoundedIcon },
         { text: "Scan", path: "/Scan", icon: ScanIcon },
         { text: "Previous Scans", path: "/History", icon: HistoryIcon },
       ],
     },
     {
-      title: "SUPPORT",
       buttons: [
         { text: "Settings", path: "/Settings", icon: SettingsOutlinedIcon },
         { text: "Help", path: "/Help", icon: HelpOutlineOutlinedIcon },
@@ -85,7 +83,6 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
 
       {sections.map((section, sectionIndex) => (
         <React.Fragment key={sectionIndex}>
-          <div className="button-title">{section.title}</div>
           <List>
             {section.buttons.map((button, buttonIndex) => {
               const isActive =
@@ -106,18 +103,19 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
                         transition:
                           "margin-left 0.3s ease, margin-right 0.3s ease",
                         borderRadius: "15px",
+                        color: isActive ? "white" : "black",
                         "&:hover": {
-                          color: "white",
-                          backgroundColor: isActive ? "#5fc2d5" : "#a0a0a0",
+                          backgroundColor: isActive ? "#6572a2" : "#a0a0a0",
                           transition: "none",
+                          color: "white",
                         },
                         minHeight: 48,
                         px: 2.3,
-                        background: isActive ? "#abdbe3" : "white",
+                        background: isActive ? "#6572a2" : "white",
                       },
                     ]}
                   >
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ color: isActive ? "white" : "" }}>
                       {React.createElement(button.icon)}
                     </ListItemIcon>
                     <ListItemText
