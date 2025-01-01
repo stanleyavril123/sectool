@@ -1,8 +1,8 @@
 import React from "react";
 import scanData from "./scan.json";
-import ScanBox from "../components/ScanBox";
-import OverviewBox from "../components/OverviewBox";
-import ImprovementsBox from "../components/ImprovementsBox";
+import ScanBox from "../components/sidebar/ScanBox";
+import OverviewBox from "../components/dashboard/OverviewBox";
+import ImprovementsBox from "../components/dashboard/ImprovementsBox";
 import "./Dashboard.css";
 
 function Dashboard() {
