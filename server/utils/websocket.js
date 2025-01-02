@@ -1,22 +1,32 @@
 import { WebSocketServer } from "ws";
 
+let wss = null;
+
 export function initializeWebSocket(port) {
-  const wss = new WebSocketServer({ port });
+  if (!wss) {
+		wss = new WebSocketServer({ port });
 
-  wss.on("connection", (ws) => {
-    console.log("Client connected to WebSocket");
-
-    ws.on("close", () => {
-      console.log("Client disconnected");
-    });
-  });
-
+		wss.on("connection", (ws) => {
+			console.log("Client connected to WebSocket");
+	
+			ws.on("close", () => {
+				console.log("Client disconnected");
+			});
+		});
+  }
   return wss;
 }
 
-export function sendProgress(wss, progress, message) {
+export function getWebSocketServer() {
+	if (!wss) {
+		throw new Error("WebSocket Server not initialized")
+	}
+	return wss;
+}
+
+export function sendProgress(progress, message) {
   if (!wss || !wss.clients) {
-    console.error("WebSocket server (wss) is not initialized.");
+    console.error("WebSocket Server not initialized");
     return;
   }
 
@@ -25,4 +35,6 @@ export function sendProgress(wss, progress, message) {
       client.send(JSON.stringify({ progress, message }));
     }
   });
+
+	console.log(`Progress sent: ${progress}% - ${message}`); // DEBUG
 }

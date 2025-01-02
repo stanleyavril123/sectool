@@ -10,11 +10,6 @@ const wss = initializeWebSocket(5021);
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.wss = wss;
-  next();
-});
-
 app.use("/Scan", scanRouter);
 // app.use(dashboardRouter);
 

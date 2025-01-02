@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
       body: JSON.stringify({ target, mode }),
     }).then((r) => r.json());
 
-    sendProgress(25, "Nmap scan completed");
+    sendProgress(20, "Nmap scan completed");
     // console.log("Nmap Response:", nmapResponse);
 
     const crawlPayload = getWebServer(nmapResponse); // DEBUG
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
       body: JSON.stringify(crawlPayload),
     }).then((r) => r.json());
 
-    sendProgress(wss, 50, "Webcrawl completed");
+    sendProgress(40, "Webcrawl completed");
     // console.log("Crawl Response:", crawlResponse);
 
     // SQL Injection
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
       }
     ).then((r) => r.json());
 
-    sendProgress(wss, 50, "SQL injection scan completed");
+    sendProgress(60, "SQL injection scan completed");
 
     // XSS scan
     const xssResponse = await fetch("http://localhost:5001/api/xss", {
@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
       body: JSON.stringify({ target, mode }),
     }).then((r) => r.json());
 
-    sendProgress(wss, 75, "XSS scan completed");
+    sendProgress(80, "XSS scan completed");
 
     const combinedResponse = {
       status: "success",
@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
     };
     saveScanResult(combinedResponse);
 
-    sendProgress(wss, 100, "All scans completed");
+    sendProgress(100, "All scans completed");
     res.status(200).json(combinedResponse);
   }
   catch (error) {

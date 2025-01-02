@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import "./ScanBar.css";
 import ScanIcon from "@mui/icons-material/GpsFixed";
 
-const ScanForm: React.FC = () => {
+// TEMPORARY ONSCANSTART PROP (REMOVE LATER)
+const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
   const [input, setInput] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,6 +16,9 @@ const ScanForm: React.FC = () => {
     }
     
     console.log(`Scanning : ${input} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`);
+
+    // TEMP WEBSOCKET TEST
+    onScanStart();
     
     try {
       const response = await fetch("http://localhost:5020/Scan", {
