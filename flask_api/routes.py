@@ -1,12 +1,14 @@
-from flask import Flask, jsonify, request
-import nmap
-import subprocess
 import json
 import os
+import subprocess
+
+import nmap
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-@app.route('/api/nmap', methods=['POST'])
+
+@app.route("/api/nmap", methods=["POST"])
 def nmap_scan():
     data = request.get_json()
     target = data.get("target")
@@ -25,10 +27,7 @@ def nmap_scan():
 
         nm.scan(hosts=target, arguments=arguments)
 
-        scan_results = {
-            host: nm[host]
-            for host in nm.all_hosts()
-        }
+        scan_results = {host: nm[host] for host in nm.all_hosts()}
 
         return jsonify(scan_results), 200
 
@@ -36,64 +35,111 @@ def nmap_scan():
         print(f"Error running Nmap: {e}")
         return jsonify({"error": f"Nmap failed: {str(e)}"}), 500
 
-@app.route('/api/crawling', methods=['POST'])
+
+@app.route("/api/crawling", methods=["POST"])
 def web_crawler():
     data = request.get_json()
     print("Received data:", data)
-    domain = data.get('domain')
-    ports = data.get('ports', [])
+    domain = data.get("domain")
+    ports = data.get("ports", [])
     max_depth = 3  # peut-etre metre ces info dans le body.. a voire
     max_pages = 100
-    
+
     if not domain:
         return jsonify({"error: Domain not found"}), 400
-    
+
     crawler_script_path = os.path.join(
-        os.path.dirname(__file__), 
-        "scripts", 
-        "crawler.js"
+        os.path.dirname(__file__), "scripts", "crawler.js"
     )
-     
+
     try:
         result = subprocess.run(
-            ["node", crawler_script_path, domain, json.dumps(ports), str(max_depth), str(max_pages)],
+            [
+                "node",
+                crawler_script_path,
+                domain,
+                json.dumps(ports),
+                str(max_depth),
+                str(max_pages),
+            ],
             capture_output=True,
             text=True,
-            timeout=300
+            timeout=300,
         )
         print("STDOUT:", result.stdout)  # Log standard output
         print("STDERR:", result.stderr)  # Log errors
- 
+
         if result.returncode != 0:
             return jsonify({"error": "Crawler failed", "details": result.stderr}), 500
-        
+
         output = json.loads(result.stdout)
         return jsonify(output)
-    
+
     except subprocess.TimeoutExpired:
         return jsonify({"error": "Crawler timed out"}), 504
     except json.JSONDecodeError as e:
 
         print("JSONDecodeError:", e)
         print("STDOUT that caused error:", result.stdout)
-        return jsonify({
-            "error": "Invalid JSON output",
-            "details": str(e),
-            "stdout": result.stdout.strip()
-        }), 500
+        return (
+            jsonify(
+                {
+                    "error": "Invalid JSON output",
+                    "details": str(e),
+                    "stdout": result.stdout.strip(),
+                }
+            ),
+            500,
+        )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500 
+        return jsonify({"error": str(e)}), 500
 
-@app.route('/api/sqlInjection', methods=['POST'])
+
+@app.route("/api/hidden-dir-subs", methods=["POST"])
+def dirSubsTraversal():
+    data = request.get_json()
+    urls = data.get("crawledUrls")
+    dirseach_script_path = os.path.join(
+        os.path.dirname(__file__), "scritps", "dirsearch", "dirsearch.py"
+    )
+    wordlist_path = dirseach_script_path = os.path.join(
+        os.path.dirname(__file__), "scritps", "wordlists", "common.txt"
+    )
+
+    command = [
+        "python3",
+        dirseach_script_path,
+        "-u",
+        urls[1],
+        "-w",
+        wordlist_path,
+        "-e",
+        "php,html",
+    ]
+    try:
+        result = subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
+        print(result.stdout)
+        print(result.stderr)
+
+        return {"success": True, "output": result.stdout, "errors": result.stderr}, 200
+    except Exception as e:
+        return {"success": False, "error": str(e)}, 500
+
+
+@app.route("/api/sqlInjection", methods=["POST"])
 def sqlInjection():
     # placeholder
     return jsonify({"status": "not implemented"})
 
-@app.route('/api/xss', methods=['POST'])
+
+@app.route("/api/xss", methods=["POST"])
 def xss():
     # placeholder
     return jsonify({"status": "not implemented"})
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True, port=5001)  # Runs on port 5001
