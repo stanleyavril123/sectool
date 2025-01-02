@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { target, mode } = req.body;
   const wss = req.wss;
-  
+
   try {
     validateTarget(target);
     sendProgress(0, "Starting scan...");
@@ -38,6 +38,17 @@ router.post("/", async (req, res) => {
     sendProgress(40, "Webcrawl completed");
     // console.log("Crawl Response:", crawlResponse);
 
+    // Hidden Directory + subdomain Traversal
+    const dirSubsResponse = await fetch(
+      "http://localhost:5001/api/hidden-dir-subs",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(crawlResponse),
+      },
+    ).then((r) => r.json());
+
+    console.log("Hidden-dir Response:", crawlResponse);
     // SQL Injection
     const sqlInjectionResponse = await fetch(
       "http://localhost:5001/api/sqlInjection",
@@ -45,7 +56,7 @@ router.post("/", async (req, res) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ target, mode }),
-      }
+      },
     ).then((r) => r.json());
 
     sendProgress(60, "SQL injection scan completed");
@@ -62,14 +73,19 @@ router.post("/", async (req, res) => {
     const combinedResponse = {
       status: "success",
       timestamp: new Date().toISOString(),
-      tools: [nmapResponse, crawlResponse, sqlInjectionResponse, xssResponse],
+      tools: [
+        nmapResponse,
+        crawlResponse,
+        dirSubsResponse,
+        sqlInjectionResponse,
+        xssResponse,
+      ],
     };
     saveScanResult(combinedResponse);
 
     sendProgress(100, "All scans completed");
     res.status(200).json(combinedResponse);
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: error.message });
   }
