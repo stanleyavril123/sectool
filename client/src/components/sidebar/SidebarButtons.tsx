@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HistoryIcon from "@mui/icons-material/History";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import "./SidebarButtons.css";
 
 interface SidebarButtonsProps {
@@ -42,6 +43,7 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
       buttons: [
         { text: "Settings", path: "/Settings", icon: SettingsOutlinedIcon },
         { text: "Help", path: "/Help", icon: HelpOutlineOutlinedIcon },
+        { text: "User", path: "/User", icon: PermIdentityOutlinedIcon},
       ],
     },
   ];
