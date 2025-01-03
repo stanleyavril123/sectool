@@ -101,10 +101,10 @@ def dirSubsTraversal():
     data = request.get_json()
     urls = data.get("crawledUrls")
     dirseach_script_path = os.path.join(
-        os.path.dirname(__file__), "scritps", "dirsearch", "dirsearch.py"
+        os.path.dirname(__file__), "scripts", "dirsearch", "dirsearch.py"
     )
-    wordlist_path = dirseach_script_path = os.path.join(
-        os.path.dirname(__file__), "scritps", "wordlists", "common.txt"
+    wordlist_path = os.path.join(
+        os.path.dirname(__file__), "scripts", "wordlists", "common.txt"
     )
 
     command = [
@@ -124,9 +124,32 @@ def dirSubsTraversal():
         print(result.stdout)
         print(result.stderr)
 
-        return {"success": True, "output": result.stdout, "errors": result.stderr}, 200
+        try:
+            output_json = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "errors": "Invalid JSON output from dirsearch script.",
+                        "output": None,
+                    }
+                ),
+                500,
+            )
+
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "dirTraversalUrls": output_json.get("dirTraversalUrls", []),
+                    "tool": output_json.get("tool", "dirTraversal"),
+                }
+            ),
+            200,
+        )
     except Exception as e:
-        return {"success": False, "error": str(e)}, 500
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 @app.route("/api/sqlInjection", methods=["POST"])
