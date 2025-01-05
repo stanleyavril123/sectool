@@ -103,9 +103,11 @@ def web_crawler():
 def hiddenDir():
     try:
         data = request.get_json()
-
-        target_url = data[1]
-        if not target_url:
+        print(f"Received data: {data}")
+        domain = data.get("domain")
+        target_url = f'https://{domain}' # a rendre dynamique
+        print(target_url)
+        if not isinstance(data, dict):
             return jsonify({"success": False, "error": "Missing 'url' parameter"}), 400
 
         wordlist_path = os.path.join(

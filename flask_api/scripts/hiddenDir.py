@@ -1,5 +1,4 @@
 import asyncio
-
 import aiohttp
 
 
@@ -41,9 +40,9 @@ async def hidden_dir(
 
     urls_to_test = []
     for word in paths:
-        urls_to_test.append(f"{base_url}{word}")
+        urls_to_test.append(f"{base_url}/{word}")
         for ext in extensions:
-            urls_to_test.append(f"{base_url}{word}.{ext}")
+            urls_to_test.append(f"{base_url}/{word}.{ext}")
 
     semaphore = asyncio.Semaphore(max_concurrent)
 

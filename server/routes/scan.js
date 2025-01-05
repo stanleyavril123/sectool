@@ -25,14 +25,14 @@ router.post("/", async (req, res) => {
     sendProgress(20, "Nmap scan completed");
     // console.log("Nmap Response:", nmapResponse);
 
-    const crawlPayload = getWebServer(nmapResponse); // DEBUG
-    console.log("Crawl Payload:", crawlPayload); // DEBUG
+    const webServers = getWebServer(nmapResponse); // DEBUG
+    console.log("Crawl Payload:", webServers); // DEBUG
 
     // Web Crawler
     const crawlResponse = await fetch("http://localhost:5001/api/crawling", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(crawlPayload),
+      body: JSON.stringify(webServers),
     }).then((r) => r.json());
 
     sendProgress(40, "Webcrawl completed");
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(crawlResponse.crawledUrls),
+        body: JSON.stringify(webServers),
       },
     ).then((r) => r.json());
 
