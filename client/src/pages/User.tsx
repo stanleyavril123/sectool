@@ -2,11 +2,17 @@ import './User.css'
 import { useState, useRef } from 'react';
 
 function isAuthenticated() {
-    localStorage.setItem("Auth", "1234");
     const authToken = localStorage.getItem("Auth");
     console.log(authToken);
 
     return authToken;
+}
+
+function storeToken(token : string) {
+    if (!token) {
+        return
+    }
+    localStorage.setItem("Auth", token);
 }
 
 
@@ -32,13 +38,20 @@ function User() {
                 if (!res.ok) {
                     throw new Error("Unauthorized")
                 }
-                else {
-                    setSubmitStatus('success')}
-                })
-            .catch((error) => setSubmitStatus('error'));
+                return res.json();
+            })
+            .then((data) => {
+                setSubmitStatus('success');
+                storeToken(data.token);
+                setLoggedIn(true);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                setSubmitStatus('error')
+            });
         };
 
-    if (!loggedIn) {
+    if (!loggedIn && !isAuthenticated()) {
         return ( <div id="login"> 
         <form ref={formRef} onSubmit={handleSubmit}>
             <label>Username:</label>
@@ -63,7 +76,7 @@ function User() {
 )}
     else {
         return <div id="login">
-        <p>GET OUTTTTT</p>
+        <p>Hello user</p>
     </div>
     }
 }

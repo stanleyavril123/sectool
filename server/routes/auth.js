@@ -1,5 +1,6 @@
 import express from "express";
 import fetch from "node-fetch"; // Import node-fetch for HTTP requests
+import {v4 as uuidv4} from 'uuid';
 
 const router = express.Router();
 
@@ -32,7 +33,8 @@ router.post("/login", async (req, res) => {
         console.log("Requested: ", req.body);
         console.log("Found users", getUsers())
         if (containsObject(req.body, getUsers())) {
-            res.json({ success: true })
+            let token = uuidv4();
+            res.json({ success: true, token: token })
         }   
         else{
             res.status(401).json({ success: false, message: "An error occurred" });
