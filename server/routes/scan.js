@@ -38,17 +38,17 @@ router.post("/", async (req, res) => {
     sendProgress(40, "Webcrawl completed");
     // console.log("Crawl Response:", crawlResponse);
 
-    // Hidden Directory + subdomain Traversal
-    const dirSubsResponse = await fetch(
-      "http://localhost:5001/api/hidden-dir-subs",
+    // Hidden Directory
+    const hiddenDirResponse = await fetch(
+      "http://localhost:5001/api/hidden-dir",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(crawlResponse),
+        body: JSON.stringify(crawlResponse.crawledUrls),
       },
     ).then((r) => r.json());
 
-    console.log("Hidden-dir Response:", crawlResponse);
+    console.log("Hidden-dir Response:", hiddenDirResponse);
     // SQL Injection
     const sqlInjectionResponse = await fetch(
       "http://localhost:5001/api/sqlInjection",
@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
       tools: [
         nmapResponse,
         crawlResponse,
-        dirSubsResponse,
+        hiddenDirResponse,
         sqlInjectionResponse,
         xssResponse,
       ],

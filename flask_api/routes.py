@@ -1,9 +1,12 @@
+import asyncio
 import json
 import os
 import subprocess
 
 import nmap
+import requests
 from flask import Flask, jsonify, request
+from scripts.hiddenDir import hidden_dir
 
 app = Flask(__name__)
 
@@ -96,59 +99,54 @@ def web_crawler():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/hidden-dir-subs", methods=["POST"])
-def dirSubsTraversal():
-    data = request.get_json()
-    urls = data.get("crawledUrls")
-    dirseach_script_path = os.path.join(
-        os.path.dirname(__file__), "scripts", "dirsearch", "dirsearch.py"
-    )
-    wordlist_path = os.path.join(
-        os.path.dirname(__file__), "scripts", "wordlists", "common.txt"
-    )
-
-    command = [
-        "python3",
-        dirseach_script_path,
-        "-u",
-        urls[1],
-        "-w",
-        wordlist_path,
-        "-e",
-        "php,html",
-    ]
+@app.route("/api/hidden-dir", methods=["POST"])
+def hiddenDir():
     try:
-        result = subprocess.run(
-            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-        )
-        print(result.stdout)
-        print(result.stderr)
+        data = request.get_json()
 
+        target_url = data[1]
+        if not target_url:
+            return jsonify({"success": False, "error": "Missing 'url' parameter"}), 400
+
+        wordlist_path = os.path.join(
+            os.path.dirname(__file__), "scripts", "wordlists", "common.txt"
+        )
+
+        if not os.path.exists(wordlist_path):
+            return jsonify({"success": False, "error": "Wordlist file not found"}), 500
+
+        extensions = ["php", "html"]
+
+        # Step 2: Calculate home page length
+        home_len = None
         try:
-            output_json = json.loads(result.stdout)
-        except json.JSONDecodeError:
-            return (
-                jsonify(
-                    {
-                        "success": False,
-                        "errors": "Invalid JSON output from dirsearch script.",
-                        "output": None,
-                    }
-                ),
-                500,
-            )
+            print(f"Fetching home page: {target_url}")  # Debug: Fetching home page
+            home_response = requests.get(target_url, timeout=30)
+            if home_response.status_code == 200:
+                home_len = len(home_response.text)
+                print(f"Home page length: {home_len}")  # Debug: Home page length
+        except requests.RequestException as e:
+            print(f"Error fetching home page: {e}")  # Debug: Home page error
 
-        return (
-            jsonify(
-                {
-                    "success": True,
-                    "dirTraversalUrls": output_json.get("dirTraversalUrls", []),
-                    "tool": output_json.get("tool", "dirTraversal"),
-                }
-            ),
-            200,
+        results = asyncio.run(
+            hidden_dir(
+                target_url,
+                wordlist_path,
+                extensions,
+                max_concurrent=13,
+                home_len=home_len,
+            )
         )
+
+        output = {
+            "success": True,
+            "tool": "HiddenDir",
+            "results": results,
+        }
+
+        return jsonify(output), 200
     except Exception as e:
+        print(f"Error in /api/hidden-dir: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 
