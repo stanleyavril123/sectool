@@ -1,22 +1,49 @@
 import express from "express";
 import fetch from "node-fetch"; // Import node-fetch for HTTP requests
 
-const app = express();
+const router = express.Router();
+
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i].username == obj.username && list[i].password == obj.password) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function getUsers() {
+    return [   
+        {
+            "username": "John",
+            "password": "hello"
+        }
+    ]
+}
 
 /*
 TODO : setup login, sign in, logout routers
 */
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
-
+        console.log("Requested: ", req.body);
+        console.log("Found users", getUsers())
+        if (containsObject(req.body, getUsers())) {
+            res.json({ success: true })
+        }   
+        else{
+            res.status(401).json({ success: false, message: "An error occurred" });
+        }
     }
     catch {
-        
+        res.status(500).json({ success: false, message: "An error occurred" });
     }
 });
 
-app.post("/sign-up", async (req, res) => {
+router.post("/sign-up", async (req, res) => {
     try {
 
     }
@@ -26,7 +53,7 @@ app.post("/sign-up", async (req, res) => {
 });
 
 // check HTTP method
-app.delete("/logout", async (req, res) => {
+router.delete("/logout", async (req, res) => {
     try {
 
     }
@@ -35,4 +62,4 @@ app.delete("/logout", async (req, res) => {
     }
 });
 
-export default app;
+export default router;

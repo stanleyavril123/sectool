@@ -1,4 +1,5 @@
 import './User.css'
+import { useState, useRef } from 'react';
 
 function isAuthenticated() {
     localStorage.setItem("Auth", "1234");
@@ -10,13 +11,56 @@ function isAuthenticated() {
 
 
 function User() {
+    const formRef = useRef(null);
+    const [loggedIn, setLoggedIn] = useState<boolean>(false)
+    const [submitStatus, setSubmitStatus] = useState<null | 'success' | 'error'>(null)
 
-    if (isAuthenticated()) {
-        return <div id="login">
-            <p>Username</p>
-            <p>Password</p>
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        // ! to indicate that the value cannot be null when used for FormData object
+        const form = new FormData(formRef.current!);
+        
+        let object: { [key: string]: any } = {};
+        form.forEach((value, key) => object[key] = value);
+
+        fetch("http://localhost:5020/Auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(object),
+          })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Unauthorized")
+                }
+                else {
+                    setSubmitStatus('success')}
+                })
+            .catch((error) => setSubmitStatus('error'));
+        };
+
+    if (!loggedIn) {
+        return ( <div id="login"> 
+        <form ref={formRef} onSubmit={handleSubmit}>
+            <label>Username:</label>
+            <input id="username" name="username"></input>
+            <label>Password:</label>
+            <input type="password" id="pwd" name="password"></input>
+            <button type='submit'>Submit</button>
+        </form>
+
+        {submitStatus === 'error' && (
+            <p className="submit-error" data-submit="error">
+            An error occurred. Please try again.
+            </p>
+        )} 
+
+        {submitStatus === 'success' && (
+            <p className="submit-success" data-submit="success">
+            YAY
+            </p>
+        )} 
         </div>
-    }
+)}
     else {
         return <div id="login">
         <p>GET OUTTTTT</p>
