@@ -14,12 +14,14 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
       setError("Input cannot be empty.");
       return;
     }
-    
-    console.log(`Scanning : ${input} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`);
+
+    console.log(
+      `Scanning : ${input} - Mode: ${isAdvanced ? "Advanced" : "Basic"}`,
+    );
 
     // TEMP WEBSOCKET TEST
     onScanStart();
-    
+
     try {
       const response = await fetch("http://localhost:5020/Scan", {
         method: "POST",
@@ -37,12 +39,11 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
         setError(errorResponse.error);
         return;
       }
-      
+
       setError(null);
       const result = await response.json();
       setResults(result);
-    }
-    catch (err) {
+    } catch (err) {
       console.error("Error:", err);
       setError("Error occured while scanning. Please try again.");
     }
@@ -50,7 +51,17 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
 
   return (
     <div className="scan-container">
-      <h1 style={{color: "#252829", font: 'Inter', padding: 30, fontWeight: "normal" }}>Scan your website</h1> {/* Appliquer le thème global pour h1 au lieu du inline */}
+      <h1
+        style={{
+          color: "#252829",
+          font: "Inter",
+          padding: 30,
+          fontWeight: "normal",
+        }}
+      >
+        Scan your website
+      </h1>{" "}
+      {/* Appliquer le thème global pour h1 au lieu du inline */}
       <p className="scan-error">{error}</p>
       <div className="scan-form">
         <input
@@ -60,7 +71,7 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
           onChange={(e) => setInput(e.target.value)}
         />
         <button className="scan-button" onClick={handleScan}>
-        <ScanIcon sx={{ fontSize: 24 }} className="scan-icon" />
+          <ScanIcon sx={{ fontSize: 24 }} className="scan-icon" />
         </button>
       </div>
       <div className="toggle-container">
