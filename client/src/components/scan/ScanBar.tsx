@@ -53,7 +53,7 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
     <div className="scan-container">
       <h1
         style={{
-          color: "#252829",
+          color: "#fff",
           font: "Inter",
           padding: 30,
           fontWeight: "normal",

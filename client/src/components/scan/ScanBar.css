@@ -1,11 +1,67 @@
+:root {
+  --bg: #0b0f14;
+  --panel: #14171b;
+  --panel-2: #1b1f24;
+  --border: #262a33;
+  --text: #e5e7eb;
+  --muted: #9aa4b2;
+  --accent: #8ab4f8;
+  --accent-ghost: rgba(138, 180, 248, 0.12);
+  --danger: #ef5350;
+  --shadow: 0 0 0 1px var(--border);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
 .scan-container {
+  flex: 1;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
+  padding: 24px 16px;
+  gap: 12px;
+  background: var(--bg);
+}
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  opacity: 0.9;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  color: #fffff ;
+  margin: 8px 0 4px;
+}
+.title,
+h1 {
+  margin: 0;
+}
+.scan-error {
+  min-height: 20px;
+  color: var(--danger);
+  font-size: 13px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.scan-error:not(:empty) {
+  opacity: 1;
 }
 
 .scan-form {
@@ -13,88 +69,90 @@
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 720px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 6px 8px;
 }
 
 .scan-input {
   flex: 1;
-  padding: 12px;
-  font-size: 16px;
+  background: transparent;
+  color: var(--text);
   border: none;
-  background-color: #f5f5f5; /* card color */
-  border-radius: 18px;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-size: 15px;
+  padding: 12px 44px 12px 12px;
+  caret-color: var(--accent);
+}
+.scan-input::placeholder {
+  color: var(--muted);
 }
 
-.scan-input:focus {
-  box-shadow: 0 4px 8px #6572a163; /* accent transparent */
+.scan-input:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--accent-ghost),
+    var(--shadow);
+  border-radius: 10px;
 }
 
 .scan-button {
   position: absolute;
-  right: 10px;
-  background: transparent;
+  right: 6px;
+  height: 36px;
+  width: 36px;
+  display: grid;
+  place-items: center;
   border: none;
+  background: transparent;
+  border-radius: 10px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 160ms ease,
+    transform 80ms ease;
+}
+.scan-button:hover {
+  background: var(--accent-ghost);
+}
+.scan-button:active {
+  transform: scale(0.98);
 }
 
 .scan-icon {
-  color: #6572a2; /* accent */
-  transition: color 0.3s ease;
-}
-
-.scan-button:hover {
-  background-color: #6572a227; /* accent transparent */
-}
-
-.scan-error {
-  height: 20px;
-  color: #d85c5c;
-  margin-bottom: 10px;
-  font-size: 14px;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.scan-error:not(:empty) {
-  opacity: 1;
+  color: var(--accent);
 }
 
 .toggle-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 8px;
+  margin-top: 6px;
 }
 
 .toggle-button {
-  padding: 10px 20px;
-  font-size: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--muted);
+  padding: 8px 14px;
+  font-size: 13px;
   font-weight: 600;
-  text-align: center;
-  border-radius: 20px;
-  border: 2px solid #6572a2; /* accent */
-  color: #6572a2; /* accent */
-  background-color: transparent;
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+.toggle-button:hover {
+  background: #1f242b;
+}
+.toggle-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-ghost);
 }
 
 .toggle-button.active {
-  background-color: #6572a2; /* accent */
-  color: #fff; /* white <-> dark */
-  border-color:#6572a2; /* accent */
-}
-
-.toggle-button:hover:not(.active) {
-  background-color: #f0f0f0; /* card color */
+  background: var(--accent-ghost);
+  color: var(--text);
+  border-color: var(--accent);
 }

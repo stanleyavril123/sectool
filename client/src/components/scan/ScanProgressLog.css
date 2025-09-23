@@ -1,10 +1,30 @@
+:root {
+  --panel: #14171b;
+  --border: #262a33;
+  --text: #e5e7eb;
+  --muted: #9aa4b2;
+  --shadow: 0 0 0 1px var(--border);
+}
+
 .log-container {
-    display: flex;
-    color: #333;
-    font-size: 16px;
-    padding: 10px;
-    background-color: #f5f6f7;
-    border-radius: 20px;
-    align-self: center;
-    width: 35%
+  width: 100%;
+  max-width: 720px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+  line-height: 1.6;
+  font-size: 14px;
+  color: var(--text);
+  overflow-y: auto;
+  max-height: 42vh;
+}
+
+.log-container p {
+  margin: 0 0 6px;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .log-container { max-height: 50vh; }
 }
