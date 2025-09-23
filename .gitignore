@@ -1,4 +1,5 @@
 node_modules
 build
 venv
-server/data/scan_results/
+server/data/scan_results/*
+!server/data/scan_results/.gitkeep
