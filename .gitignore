@@ -1,3 +1,4 @@
 node_modules
 build
 venv
+server/data/scan_results/
