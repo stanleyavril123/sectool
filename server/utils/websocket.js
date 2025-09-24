@@ -1,4 +1,4 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 
 let wss = null;
 
@@ -31,7 +31,7 @@ export function sendProgress(progress, message) {
   }
 
   wss.clients.forEach((client) => {
-    if (client.readyState === client.OPEN) {
+    if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({ progress, message }));
     }
   });
