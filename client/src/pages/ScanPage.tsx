@@ -6,9 +6,9 @@ import "../styles.css"
 const ScanPage: React.FC = () =>  {
   
   // TEMPORARY WEBSOCKET TESTING LOGIC
-  const [resetTrigger, setResetTrigger] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(0);
   const handleScanStart = () => {
-    setResetTrigger((prev) => !prev);
+    setResetTrigger((n) => n + 1);
   };
   
   return (
