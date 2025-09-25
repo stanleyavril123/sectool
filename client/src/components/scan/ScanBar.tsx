@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ScanBar.css";
 import ScanIcon from "@mui/icons-material/GpsFixed";
+import ScanResults from "./ScanResults";
 
 // TEMPORARY ONSCANSTART PROP (REMOVE LATER)
 const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
@@ -81,13 +82,19 @@ const ScanForm: React.FC<{ onScanStart: () => void }> = ({ onScanStart }) => {
         >
           Basic Scan
         </button>
+
         <button
-          className={`toggle-button ${isAdvanced ? "active" : ""}`}
-          onClick={() => setIsAdvanced(true)}
+          className="toggle-button"
+          disabled
+          title="Coming soon"
+          aria-disabled="true"
+          tabIndex={-1}
+          onClick={(e) => e.preventDefault()}
         >
           Advanced Scan
         </button>
       </div>
+      {results && <ScanResults data={results as any} />}
     </div>
   );
 };

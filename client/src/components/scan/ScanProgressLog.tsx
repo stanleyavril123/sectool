@@ -13,7 +13,6 @@ const ScanProgressLog: React.FC<{ resetTrigger: boolean }> = ({ resetTrigger }) 
   }, [resetTrigger]);
 
 	useEffect(() => {
-    // Initialize WebSocket if not already connected
     if (!wsRef.current) {
       wsRef.current = new WebSocket("ws://localhost:5021");
 
