@@ -4,6 +4,16 @@ Simple **local** recon tool for websites. It runs an Nmap check, crawls pages, s
 
 > ⚠️ Use only on targets you own or have explicit permission to test. This is **not** an exploitation tool.
 
+
+---
+
+## Screenshot
+
+scanning **OWASP Juice Shop**
+
+![UI Screenshot](./docs/screenshot-juice-shop.png)
+
+
 ---
 
 ## Features
@@ -155,17 +165,7 @@ VITE_WS_URL=ws://localhost:5021
 { "progress": 20, "message": "Nmap scan completed" }
 ```
 
----
 
-## Screenshot
-
-> Put your screenshot here (e.g., scanning **Juice Shop**):
-
-![UI Screenshot](./docs/screenshot-juice-shop.png)
-
-Create a `docs/` folder and drop the image as `screenshot-juice-shop.png`.
-
----
 
 ## Keep the results folder in Git (but ignore outputs)
 
