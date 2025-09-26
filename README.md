@@ -1,70 +1,262 @@
-# Getting Started with Create React App
+# SecTool (Recon‑only)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Simple **local** recon tool for websites. It runs an Nmap check, crawls pages, streams progress to the UI, and saves a JSON report.
 
-## Available Scripts
+> ⚠️ Use only on targets you own or have explicit permission to test. This is **not** an exploitation tool.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* **Nmap**: open ports/services (backend job)
+* **Web crawler**: Playwright‑based page discovery
+* **Live progress**: WebSocket to the UI
+* **Results saved**: `server/data/scan_results/*.json`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* **Ubuntu** (tested on **24.04**)
+* **Node.js ≥ 18** and **npm**
+* **Python ≥ 3.10**
+* **Nmap installed locally**
 
-### `npm run build`
+  ```bash
+  sudo apt update && sudo apt install -y nmap
+  ```
+* **Playwright** browsers (installed after cloning)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  ```bash
+  npx playwright install
+  ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech Stack
 
-### `npm run eject`
+React • Node/Express • WebSocket • Flask • Playwright • Nmap
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+├─ client/                     # React UI
+│  ├─ src/components/scan
+│  │  ├─ ScanBar.tsx          # URL + scan button
+│  │  ├─ ScanProgressLog.tsx  # live WS progress
+│  │  └─ ScanResults.tsx      # renders saved result
+│  └─ src/pages/ScanPage.tsx
+│
+├─ server/                     # Node/Express API + WebSocket
+│  ├─ routes/scan.js           # POST /Scan → orchestrates nmap + crawl
+│  └─ utils/websocket.js       # ws://localhost:5021 (broadcast progress)
+│
+└─ flask_api/                  # Python side (crawler)
+   └─ routes.py                # Flask endpoints (crawling / nmap proxy)
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+> The folder `server/data/scan_results/` is created automatically at runtime and should be kept empty in git (see **Keep the results folder** below).
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Quick Start (Local Only)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Open **two terminals** (client + server) and one for the Flask API.
 
-### Code Splitting
+**1) Client (React)**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+cd client
+npm install
+npm run start
+# http://localhost:3000
+```
 
-### Analyzing the Bundle Size
+**2) Server (Express + WebSocket)**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+cd server
+npm install
+npm run start
+# HTTP: http://localhost:5020
+# WS:   ws://localhost:5021   # root path (no /ws)
+```
 
-### Making a Progressive Web App
+> The server calls `initializeWebSocket(5021)` on boot.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**3) Flask API**
 
-### Advanced Configuration
+```bash
+cd flask_api
+python3 routes.py
+# exposes http://localhost:5001/api/crawling and /api/nmap
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Python virtual env + deps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+cd flask_api
+python3 -m venv .venv
+source .venv/bin/activate
+# Create requirements.txt with: flask, requests, playwright, etc.
+pip install -r requirements.txt
+python3 routes.py
+```
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Configuration (.env)
+
+Create `.env` files if you want to change ports.
+
+**server/.env**
+
+```
+PORT_HTTP=5020
+PORT_WS=5021
+```
+
+**client/.env**
+
+```
+VITE_API_URL=http://localhost:5020
+VITE_WS_URL=ws://localhost:5021
+```
+
+---
+
+## Usage
+
+1. Open `http://localhost:3000`
+2. Enter a URL or IP you’re allowed to test
+3. Click **Basic Scan**
+4. Watch live progress (bottom‑right); results render under **Scan results** and are also written to `server/data/scan_results/`.
+
+---
+
+## API / Flow
+
+* `POST http://localhost:5020/Scan`
+
+  * validate target → `sendProgress(0, "Starting scan…")`
+  * call `http://localhost:5001/api/nmap` → `20%`
+  * build crawl payload from Nmap output
+  * call `http://localhost:5001/api/crawling` → `50%`
+  * save combined result → `100%`
+  * return the JSON (also written to disk)
+
+**Progress WebSocket:** `ws://localhost:5021` (root path)
+
+```json
+{ "progress": 20, "message": "Nmap scan completed" }
+```
+
+---
+
+## Screenshot
+
+> Put your screenshot here (e.g., scanning **Juice Shop**):
+
+![UI Screenshot](./docs/screenshot-juice-shop.png)
+
+Create a `docs/` folder and drop the image as `screenshot-juice-shop.png`.
+
+---
+
+## Keep the results folder in Git (but ignore outputs)
+
+Create the folder once and keep a placeholder:
+
+```bash
+mkdir -p server/data/scan_results
+printf "" > server/data/scan_results/.gitkeep
+```
+
+Add this to `.gitignore`:
+
+```gitignore
+server/data/scan_results/*
+!server/data/scan_results/.gitkeep
+```
+
+The code also creates the folder **at runtime** before saving, so scans work even if the directory is missing on a fresh clone.
+
+---
+
+## Sample saved JSON
+
+```json
+{
+  "status": "success",
+  "timestamp": "2025-09-22T21:57:25.346Z",
+  "tools": [
+    {
+      "46.137.15.86": {
+        "addresses": { "ipv4": "46.137.15.86" },
+        "hostnames": [
+          { "name": "juice-shop.herokuapp.com", "type": "user" },
+          { "name": "ec2-46-137-15-86.eu-west-1.compute.amazonaws.com", "type": "PTR" }
+        ],
+        "status": { "reason": "syn-ack", "state": "up" },
+        "tcp": {
+          "80":  { "name": "http",  "state": "open",  "product": "", "version": "" },
+          "443": { "name": "https", "state": "open",  "product": "", "version": "" }
+        },
+        "vendor": {}
+      }
+    },
+    {
+      "crawledUrls": [
+        "http://juice-shop.herokuapp.com/",
+        "https://juice-shop.herokuapp.com/",
+        "http://juice-shop.herokuapp.com/#/login",
+        "http://juice-shop.herokuapp.com/#/contact",
+        "http://juice-shop.herokuapp.com/#/about",
+        "http://juice-shop.herokuapp.com/#/photo-wall",
+        "http://juice-shop.herokuapp.com/#/score-board",
+        "http://juice-shop.herokuapp.com/redirect?to=https://github.com/juice-shop/juice-shop",
+        "https://juice-shop.herokuapp.com/#/login",
+        "https://juice-shop.herokuapp.com/#/contact",
+        "https://juice-shop.herokuapp.com/#/about",
+        "https://juice-shop.herokuapp.com/#/photo-wall",
+        "https://juice-shop.herokuapp.com/#/score-board",
+        "https://juice-shop.herokuapp.com/redirect?to=https://github.com/juice-shop/juice-shop",
+        "http://juice-shop.herokuapp.com/#/forgot-password",
+        "http://juice-shop.herokuapp.com/#/register",
+        "http://juice-shop.herokuapp.com/#/search?q=OWASP%20SSL%20Advanced%20Forensic%20Tool%20(O-Saft)",
+        "https://juice-shop.herokuapp.com/#/forgot-password",
+        "https://juice-shop.herokuapp.com/#/register",
+        "https://juice-shop.herokuapp.com/#/search?q=OWASP%20SSL%20Advanced%20Forensic%20Tool%20(O-Saft)"
+      ],
+      "success": true,
+      "tool": "webcrawler"
+    },
+    { "status": "not implemented" },
+    { "status": "not implemented" }
+  ]
+}
+```
+
+---
+
+## Roadmap
+
+* Hidden directory discovery (wordlists)
+* Per‑scan `scanId` isolation
+* Export (JSON/CSV)
+
+---
+
+## Legal / Ethical
+
+Educational use on **authorized** targets only. You are responsible for your use.
+
+## License
+
+MIT — see [LICENSE](./LICENSE) for full text.
+
+Copyright (c) 2025 SecTool contributors
